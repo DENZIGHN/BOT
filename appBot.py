@@ -10,9 +10,9 @@ emo = emoji.emojize
 
 @bot.message_handler(commands=['help', 'start'])
 def help(message: telebot.types.Message):
-    text = 'Введите команду:\n<имя валюты>\n<в какую перевести>\n<количество>\n' \
-           'Посмотреть возможные валюты: /values\n' \
-           '---------------------------------\nПолучить курс валют:\n' \
+    text = 'Input your command:\n<wallet name>\n<target wallet>\n<count>\n' \
+           'Check possible wallets: /values\n' \
+           '---------------------------------\nGet currency:\n' \
            '/btc_to_usd\n/euro_to_rub\n/usd_to_euro\n/usd_to_rub'
     bot.reply_to(message, text)
 
@@ -35,7 +35,7 @@ def quick_rate(message: telebot.types.Message):
 
 @bot.message_handler(commands=['values'])
 def values(message: telebot.types.Message):
-    text = 'Доступные валюты:\n'
+    text = 'Aviable wallets:\n'
     for cur in currency.keys():
         text += cur + '\n'
     bot.reply_to(message, text)
@@ -46,9 +46,9 @@ def convert(message: telebot.types.Message):
     try:
         values = message.text.split(' ')
         if len(values) > 3:
-            raise ConversionException(emo('Неправильный ввод. Слишком много параметров 🤨'))
+            raise ConversionException(emo('Wrong Input. Too many parameters'))
         elif len(values) < 2:
-            raise ConversionException(emo('Неправильный ввод. Слишком мало параметров 🤷‍♀️'))
+            raise ConversionException(emo('Wrong Input. Need more parameters'))
         elif len(values) == 2:
             values.append('1')
 
@@ -59,10 +59,10 @@ def convert(message: telebot.types.Message):
     except ConversionException as e:
         bot.reply_to(message, e)
     except Exception as e:
-        bot.reply_to(message, f'Не удалось обработать запрос\n{e}')
+        bot.reply_to(message, f'Cant calculate\n{e}')
     else:
         text = emo(
-            f'Курс {base} к {quote} = {rate}\n Для покупки {amount_float} {base} потребуется {convertion_result} {quote}     🤔')
+            f'Currency {base} to {quote} = {rate}\n For Buy {amount_float} {base} Need {convertion_result} {quote}     ')
         print(text)
         bot.send_message(message.chat.id, text)
 

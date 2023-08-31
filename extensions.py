@@ -14,19 +14,19 @@ class CryptoConverter:
     def convert(values):
         base, quote, amount = values  # [0], values[1], values[2]
         if base == quote:
-            raise ConversionException('Введены одинаковые валюты')
+            raise ConversionException('Same wallets')
         try:
             base_ticker = currency[base]
         except KeyError:
-            raise ConversionException(f'Невозможно обработать валюту{base}')
+            raise ConversionException(f'Error{base}')
         try:
             quote_ticker = currency[quote]
         except KeyError:
-            raise ConversionException(f'Невозможно обработать валюту{quote}')
+            raise ConversionException(f'Error{quote}')
         try:
             amount = float(amount)
         except ValueError:
-            raise ConversionException('Для обмена надо ввести число. Это не число.')
+            raise ConversionException('Just integer aviable to calculate, your input is not')
         r = requests.get(
             f'https://min-api.cryptocompare.com/data/price?fsym={base_ticker}&tsyms={quote_ticker}')  # ,EUR')
         # text=r.content
@@ -37,6 +37,6 @@ class CryptoConverter:
     def get_rate(values):
         base, quote, amount = values
         rate = CryptoConverter.convert(values)
-        text = f'💰 Курс {base} к {quote} = {rate}\n'
+        text = f'Currency {base} к {quote} = {rate}\n'
         return text
 
